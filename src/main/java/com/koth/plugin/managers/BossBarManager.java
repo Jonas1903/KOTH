@@ -17,7 +17,7 @@ public class BossBarManager {
 
     public void createBossBar(String title) {
         // Check if boss bar is enabled in config
-        if (!plugin.getConfig().getBoolean("boss-bar.enabled", true)) {
+        if (!plugin.getConfigManager().getConfig().getBoolean("boss-bar.enabled", true)) {
             return;
         }
         
@@ -26,8 +26,8 @@ public class BossBarManager {
         }
         
         // Get boss bar settings from config
-        String colorStr = plugin.getConfig().getString("boss-bar.color", "WHITE");
-        String styleStr = plugin.getConfig().getString("boss-bar.style", "SOLID");
+        String colorStr = plugin.getConfigManager().getConfig().getString("boss-bar.color", "WHITE");
+        String styleStr = plugin.getConfigManager().getConfig().getString("boss-bar.style", "SOLID");
         
         BarColor color;
         try {

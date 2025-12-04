@@ -204,10 +204,9 @@ public class KOTHManager {
         if (playerTimeInZone.containsKey(playerId)) {
             Player player = Bukkit.getPlayer(playerId);
             if (player != null) {
-                Bukkit.broadcastMessage(plugin.getConfigManager().colorize(
-                    plugin.getConfigManager().getConfig().getString("messages.prefix", "&6[KOTH] &r") +
-                    "§c" + player.getName() + " was knocked out! Progress reset."
-                ));
+                String message = plugin.getConfigManager().getMessage("player-knocked-out")
+                    .replace("%player%", player.getName());
+                Bukkit.broadcastMessage(message);
             }
             playerTimeInZone.remove(playerId);
             

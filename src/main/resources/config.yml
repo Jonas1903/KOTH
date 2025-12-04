@@ -47,6 +47,7 @@ messages:
   koth-no-winner: "&7KOTH has ended with no winner!"
   player-capturing: "&e%player% &7is capturing the hill! &e(%progress%)"
   player-left-area: "&c%player% &7left the KOTH area! &cProgress reset."
+  player-knocked-out: "&c%player% &7was knocked out! &cProgress reset."
   region-not-set: "&cKOTH region is not set! Use &e/koth setpos1 &cand &e/koth setpos2"
   region-set: "&aKOTH region has been set successfully!"
   position-set: "&aPosition %pos% set at: &e%x%, %y%, %z%"
