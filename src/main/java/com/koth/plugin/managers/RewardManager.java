@@ -21,8 +21,18 @@ public class RewardManager {
 
         ItemStack reward = getRewardItem();
         if (reward != null && !reward.getType().isAir()) {
-            player.getInventory().addItem(reward.clone());
-            player.sendMessage(plugin.getConfigManager().colorize("§aYou received your KOTH reward!"));
+            // Try to add item to inventory
+            Map<Integer, ItemStack> leftover = player.getInventory().addItem(reward.clone());
+            
+            // If inventory was full, drop items at player's location
+            if (!leftover.isEmpty()) {
+                for (ItemStack item : leftover.values()) {
+                    player.getWorld().dropItem(player.getLocation(), item);
+                }
+                player.sendMessage(plugin.getConfigManager().getMessage("reward-received-dropped"));
+            } else {
+                player.sendMessage(plugin.getConfigManager().getMessage("reward-received"));
+            }
         }
     }
 

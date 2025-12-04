@@ -52,6 +52,8 @@ messages:
   region-set: "&aKOTH region has been set successfully!"
   position-set: "&aPosition %pos% set at: &e%x%, %y%, %z%"
   reward-set: "&aKOTH reward has been set to the item in your hand!"
+  reward-received: "&a&l✦ You received your KOTH reward!"
+  reward-received-dropped: "&a&l✦ You received your KOTH reward! &e(Some items were dropped due to full inventory)"
   config-reloaded: "&aKOTH configuration reloaded!"
   koth-stopped: "&cKOTH has been stopped!"
   no-active-koth: "&cThere is no active KOTH event!"
