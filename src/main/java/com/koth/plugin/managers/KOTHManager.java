@@ -42,10 +42,8 @@ public class KOTHManager {
         // Announce start
         Bukkit.broadcastMessage(plugin.getConfigManager().getMessage("koth-started"));
 
-        // Create boss bar
-        plugin.getBossBarManager().createBossBar(
-            plugin.getConfigManager().colorize("§fKOTH: Waiting for players...")
-        );
+        // Create boss bar (white bar with default dark text)
+        plugin.getBossBarManager().createBossBar("KOTH: Waiting for players...");
 
         // Start capture check task (runs every second)
         captureTask = Bukkit.getScheduler().runTaskTimer(plugin, this::checkCapture, 20L, 20L);
@@ -131,9 +129,7 @@ public class KOTHManager {
                 int captureTime = plugin.getConfigManager().getCaptureTime();
                 
                 double progress = (double) captureProgress / captureTime;
-                String title = plugin.getConfigManager().colorize(
-                    "§f" + player.getName() + " is capturing! " + captureProgress + "/" + captureTime + "s"
-                );
+                String title = player.getName() + " is capturing! " + captureProgress + "/" + captureTime + "s";
                 plugin.getBossBarManager().updateBossBar(title, progress);
 
                 // Check if capture is complete
@@ -143,10 +139,7 @@ public class KOTHManager {
             }
         } else {
             captureProgress = 0;
-            plugin.getBossBarManager().updateBossBar(
-                plugin.getConfigManager().colorize("§fKOTH: Waiting for players..."),
-                0.0
-            );
+            plugin.getBossBarManager().updateBossBar("KOTH: Waiting for players...", 0.0);
         }
     }
 
@@ -205,6 +198,24 @@ public class KOTHManager {
 
     public long getNextKothTime() {
         return nextKothTime;
+    }
+
+    public void resetPlayerProgress(UUID playerId) {
+        if (playerTimeInZone.containsKey(playerId)) {
+            Player player = Bukkit.getPlayer(playerId);
+            if (player != null) {
+                String message = plugin.getConfigManager().getMessage("player-knocked-out")
+                    .replace("%player%", player.getName());
+                Bukkit.broadcastMessage(message);
+            }
+            playerTimeInZone.remove(playerId);
+            
+            // If this was the capturing player, reset capture state
+            if (playerId.equals(capturingPlayer)) {
+                capturingPlayer = null;
+                captureProgress = 0;
+            }
+        }
     }
 
     public void shutdown() {

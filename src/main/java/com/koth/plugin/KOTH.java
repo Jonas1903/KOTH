@@ -1,6 +1,7 @@
 package com.koth.plugin;
 
 import com.koth.plugin.commands.KOTHCommand;
+import com.koth.plugin.listeners.PlayerDamageListener;
 import com.koth.plugin.listeners.PlayerMoveListener;
 import com.koth.plugin.managers.BossBarManager;
 import com.koth.plugin.managers.KOTHManager;
@@ -32,6 +33,7 @@ public class KOTH extends JavaPlugin {
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerDamageListener(this), this);
 
         // Schedule first KOTH if region is set
         if (regionManager.hasRegion()) {

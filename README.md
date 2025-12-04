@@ -34,11 +34,12 @@ All commands require OP permission (`koth.admin`).
 
 - `/koth start` - Manually start a KOTH event
 - `/koth stop` - Stop the current KOTH event
-- `/koth setregion pos1` - Set the first corner of the KOTH region
-- `/koth setregion pos2` - Set the second corner of the KOTH region
-- `/koth setreward <command>` - Set the reward command (use `%player%` for player name)
+- `/koth setpos1` - Set the first corner of the KOTH region
+- `/koth setpos2` - Set the second corner of the KOTH region
+- `/koth setreward` - Set the reward to the item currently held in your hand
 - `/koth reload` - Reload the configuration
 - `/koth status` - Show current KOTH status
+- `/koth help` - Show all available commands
 
 ## Configuration
 
@@ -66,19 +67,39 @@ announcements:
   - 5
   - 1
 
-# Reward configuration
+# Reward configuration (item will be serialized here when set)
 reward:
-  command: "give %player% diamond 5"
   enabled: true
+  item: {}
 ```
 
 ## Building from Source
+
+### Using Maven (Command Line)
 
 ```bash
 mvn clean package
 ```
 
-The compiled JAR will be in the `target` directory.
+The compiled JAR will be in the `target` directory as `KOTH-1.0.0.jar`.
+
+### Using IntelliJ IDEA
+
+1. Open IntelliJ IDEA
+2. Click **File** → **Open** and select the project directory
+3. Wait for IntelliJ to import the Maven project and download dependencies
+4. To build:
+   - Click **View** → **Tool Windows** → **Maven**
+   - In the Maven panel, expand **KOTH** → **Lifecycle**
+   - Double-click **package** to build the JAR
+5. The compiled JAR will be in the `target` directory
+
+#### Running/Debugging in IntelliJ
+
+While you cannot run a Bukkit/Paper plugin directly in IntelliJ without a server, you can:
+1. Set up a local Paper 1.21.8 test server
+2. Configure IntelliJ to copy the JAR to the server's plugins folder after build
+3. Use remote debugging to debug the plugin on a running server
 
 ## Project Structure
 
@@ -113,14 +134,15 @@ KOTH/
 
 1. Set up the KOTH region:
    ```
-   /koth setregion pos1
+   /koth setpos1
    (move to opposite corner)
-   /koth setregion pos2
+   /koth setpos2
    ```
 
-2. Set a reward:
+2. Set a reward (hold the item you want to give as a reward):
    ```
-   /koth setreward give %player% diamond 64
+   (hold item in hand)
+   /koth setreward
    ```
 
 3. Start KOTH manually or wait for automatic start:
@@ -139,7 +161,15 @@ KOTH/
 - The player who has been in the region the longest becomes the "capturing" player
 - Only one player can capture at a time
 - If a player leaves the region, their progress is completely reset
+- If a player is hit by another player while capturing, their progress is completely reset
 - First player to reach 60 seconds (configurable) wins
+
+### Reward System
+- Rewards are item-based (not command-based)
+- Hold the item you want to give as a reward in your hand
+- Use `/koth setreward` to set it as the KOTH reward
+- The item (including enchantments, name, lore, etc.) is saved in the config
+- Winners receive an exact copy of the reward item in their inventory
 
 ### Boss Bar
 - Displays globally to all online players

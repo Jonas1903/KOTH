@@ -37,17 +37,23 @@ public class KOTHCommand implements CommandExecutor, TabCompleter {
             case "stop":
                 handleStop(sender);
                 break;
-            case "setregion":
-                handleSetRegion(sender, args);
+            case "setpos1":
+                handleSetPos1(sender);
+                break;
+            case "setpos2":
+                handleSetPos2(sender);
                 break;
             case "setreward":
-                handleSetReward(sender, args);
+                handleSetReward(sender);
                 break;
             case "reload":
                 handleReload(sender);
                 break;
             case "status":
                 handleStatus(sender);
+                break;
+            case "help":
+                sendHelp(sender);
                 break;
             default:
                 sendHelp(sender);
@@ -83,43 +89,41 @@ public class KOTHCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(plugin.getConfigManager().getMessage("koth-stopped"));
     }
 
-    private void handleSetRegion(CommandSender sender, String[] args) {
+    private void handleSetPos1(CommandSender sender) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(plugin.getConfigManager().colorize("§cThis command can only be used by players!"));
             return;
         }
 
         Player player = (Player) sender;
-        
-        if (args.length < 2) {
-            sender.sendMessage(plugin.getConfigManager().colorize("§cUsage: /koth setregion <pos1|pos2>"));
-            return;
-        }
-        
-        String position = args[1].toLowerCase();
-        if (position.equals("pos1") || position.equals("1")) {
-            plugin.getRegionManager().setPosition(player, 1);
-        } else if (position.equals("pos2") || position.equals("2")) {
-            plugin.getRegionManager().setPosition(player, 2);
-            plugin.getRegionManager().createRegion(player);
-        } else {
-            sender.sendMessage(plugin.getConfigManager().colorize("§cUsage: /koth setregion <pos1|pos2>"));
-        }
+        plugin.getRegionManager().setPosition(player, 1);
     }
 
-    private void handleSetReward(CommandSender sender, String[] args) {
-        if (args.length < 2) {
-            sender.sendMessage(plugin.getConfigManager().colorize("§cUsage: /koth setreward <command>"));
+    private void handleSetPos2(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(plugin.getConfigManager().colorize("§cThis command can only be used by players!"));
             return;
         }
 
-        StringBuilder rewardCommand = new StringBuilder();
-        for (int i = 1; i < args.length; i++) {
-            if (i > 1) rewardCommand.append(" ");
-            rewardCommand.append(args[i]);
+        Player player = (Player) sender;
+        plugin.getRegionManager().setPosition(player, 2);
+        // Automatically create region when both positions are set
+        plugin.getRegionManager().createRegion(player);
+    }
+
+    private void handleSetReward(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(plugin.getConfigManager().colorize("§cThis command can only be used by players!"));
+            return;
         }
 
-        plugin.getRewardManager().setReward(rewardCommand.toString());
+        Player player = (Player) sender;
+        if (player.getInventory().getItemInMainHand().getType().isAir()) {
+            sender.sendMessage(plugin.getConfigManager().colorize("§cYou must be holding an item to set it as a reward!"));
+            return;
+        }
+
+        plugin.getRewardManager().setReward(player.getInventory().getItemInMainHand());
         sender.sendMessage(plugin.getConfigManager().getMessage("reward-set"));
     }
 
@@ -164,29 +168,21 @@ public class KOTHCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(plugin.getConfigManager().colorize("§6=== KOTH Commands ==="));
         sender.sendMessage(plugin.getConfigManager().colorize("§e/koth start §7- Start a KOTH event"));
         sender.sendMessage(plugin.getConfigManager().colorize("§e/koth stop §7- Stop current KOTH event"));
-        sender.sendMessage(plugin.getConfigManager().colorize("§e/koth setregion pos1 §7- Set first corner of KOTH region"));
-        sender.sendMessage(plugin.getConfigManager().colorize("§e/koth setregion pos2 §7- Set second corner of KOTH region"));
-        sender.sendMessage(plugin.getConfigManager().colorize("§e/koth setreward <reward> §7- Set reward command"));
+        sender.sendMessage(plugin.getConfigManager().colorize("§e/koth setpos1 §7- Set first corner of KOTH region"));
+        sender.sendMessage(plugin.getConfigManager().colorize("§e/koth setpos2 §7- Set second corner of KOTH region"));
+        sender.sendMessage(plugin.getConfigManager().colorize("§e/koth setreward §7- Set reward to item in hand"));
         sender.sendMessage(plugin.getConfigManager().colorize("§e/koth reload §7- Reload configuration"));
         sender.sendMessage(plugin.getConfigManager().colorize("§e/koth status §7- Show KOTH status"));
+        sender.sendMessage(plugin.getConfigManager().colorize("§e/koth help §7- Show this help message"));
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            List<String> completions = Arrays.asList("start", "stop", "setregion", "setreward", "reload", "status");
+            List<String> completions = Arrays.asList("start", "stop", "setpos1", "setpos2", "setreward", "reload", "status", "help");
             List<String> result = new ArrayList<>();
             for (String completion : completions) {
                 if (completion.toLowerCase().startsWith(args[0].toLowerCase())) {
-                    result.add(completion);
-                }
-            }
-            return result;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("setregion")) {
-            List<String> completions = Arrays.asList("pos1", "pos2");
-            List<String> result = new ArrayList<>();
-            for (String completion : completions) {
-                if (completion.toLowerCase().startsWith(args[1].toLowerCase())) {
                     result.add(completion);
                 }
             }

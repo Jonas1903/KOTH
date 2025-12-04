@@ -49,10 +49,6 @@ public class ConfigManager {
         return config.getInt("event-interval", 60);
     }
 
-    public String getRewardCommand() {
-        return config.getString("reward.command", "");
-    }
-
     public boolean isRewardEnabled() {
         return config.getBoolean("reward.enabled", true);
     }

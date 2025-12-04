@@ -30,14 +30,16 @@ This document provides technical details about the KOTH (King of the Hill) plugi
 - Contains point-in-region collision detection
 
 **BossBarManager** - Visual display
-- Creates and manages Bukkit BossBar with WHITE color and SOLID style
+- Creates and manages Bukkit BossBar with configurable color and style (WHITE/SOLID by default)
 - Updates boss bar title and progress every second
 - Automatically adds joining players to active boss bar
 - Handles boss bar cleanup on KOTH end
+- Can be disabled via config
 
 **RewardManager** - Reward system
-- Executes console commands for rewards
-- Supports %player% placeholder in reward commands
+- Manages item-based rewards (not command-based)
+- Serializes/deserializes ItemStack to config
+- Gives reward items directly to winner's inventory
 - Handles reward configuration persistence
 
 **ConfigManager** - Configuration
@@ -64,9 +66,15 @@ This document provides technical details about the KOTH (King of the Hill) plugi
 
 #### Listeners
 
-**PlayerMoveListener** - Event handling
+**PlayerMoveListener** - Player join handling
 - Adds joining players to active boss bar
 - Lightweight listener for player join events
+
+**PlayerDamageListener** - Combat detection
+- Listens for EntityDamageByEntityEvent
+- Resets capture progress when player is hit by another player
+- Broadcasts knockout message
+- Ensures combat affects capture mechanics
 
 ## Key Algorithms
 
@@ -104,12 +112,13 @@ This document provides technical details about the KOTH (King of the Hill) plugi
 - **capture-time**: Seconds required to win (default: 60)
 - **event-interval**: Minutes between KOTH events (default: 60)
 - **announcements**: List of minutes before start to announce
-- **reward**: Command to execute and enabled flag
+- **reward**: Serialized ItemStack and enabled flag
+- **boss-bar**: Color, style, and enabled flag
 - **messages**: All user-facing messages with color code support
 
 ### Persistence
-- Region is saved immediately when set via /koth setregion
-- Reward is saved immediately when set via /koth setreward
+- Region is saved immediately when set via /koth setpos1 and /koth setpos2
+- Reward item is serialized and saved immediately when set via /koth setreward
 - Other config values persist across reloads
 - No runtime state persistence (intentional - clean start on server restart)
 
@@ -120,6 +129,7 @@ The plugin tracks cumulative time in zone rather than continuous presence. This 
 - If Player A is in zone for 30 seconds, leaves, then Player B enters for 31 seconds, Player B wins
 - This encourages active defense and creates more dynamic gameplay
 - Progress is COMPLETELY reset when leaving (not paused)
+- Progress is COMPLETELY reset when hit by another player (combat disruption)
 
 ### Why One Capturing Player at a Time
 - Only the player with the longest cumulative time in zone captures
@@ -211,18 +221,20 @@ The plugin tracks cumulative time in zone rather than continuous presence. This 
 ## Testing Recommendations
 
 ### Manual Testing Checklist
-1. Set region with /koth setregion
-2. Configure reward with /koth setreward
+1. Set region with /koth setpos1 and /koth setpos2
+2. Hold an item and configure reward with /koth setreward
 3. Start KOTH with /koth start
 4. Enter region and verify boss bar appears
 5. Stay for 60 seconds and verify win
 6. Leave region mid-capture and verify reset
-7. Have multiple players enter and verify longest time wins
-8. Wait for automatic KOTH and verify scheduling
-9. Check announcements appear at correct times
-10. Verify reward is given to winner
-11. Test reload command preserves settings
-12. Test status command shows correct information
+7. Hit capturing player and verify progress resets
+8. Have multiple players enter and verify longest time wins
+9. Wait for automatic KOTH and verify scheduling
+10. Check announcements appear at correct times
+11. Verify reward item is given to winner
+12. Test reload command preserves settings
+13. Test status command shows correct information
+14. Test help command displays all commands
 
 ### Edge Cases to Test
 - Player leaves server while capturing
@@ -272,10 +284,11 @@ public interface KOTHApi {
 - Configuration values have sensible defaults
 - Player existence checked before operations
 
-### Command Execution
-- Reward commands executed as console (safe)
-- No player input directly executed
-- %player% placeholder properly sanitized
+### Reward Safety
+- Rewards are ItemStack-based (no command execution)
+- Items are serialized/deserialized from config
+- No player input can inject malicious data
+- Items given directly to inventory (safe operation)
 
 ## Maintenance Notes
 
