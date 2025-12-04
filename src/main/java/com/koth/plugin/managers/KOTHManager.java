@@ -110,20 +110,17 @@ public class KOTHManager {
         }
 
         // Reset times for players not in zone
-        List<UUID> toRemove = new ArrayList<>();
-        for (Map.Entry<UUID, Long> entry : playerTimeInZone.entrySet()) {
+        playerTimeInZone.entrySet().removeIf(entry -> {
             Player player = Bukkit.getPlayer(entry.getKey());
             if (player == null || !plugin.getRegionManager().isInRegion(player.getLocation())) {
                 if (entry.getKey().equals(capturingPlayer) && player != null) {
                     Bukkit.broadcastMessage(plugin.getConfigManager().getMessage("player-left-area")
                         .replace("%player%", player.getName()));
                 }
-                toRemove.add(entry.getKey());
+                return true;
             }
-        }
-        for (UUID uuid : toRemove) {
-            playerTimeInZone.remove(uuid);
-        }
+            return false;
+        });
 
         capturingPlayer = newCapturing;
 
