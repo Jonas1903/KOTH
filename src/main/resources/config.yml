@@ -1,0 +1,52 @@
+# KOTH Configuration File
+
+# Region settings (will be set via commands)
+region:
+  world: ""
+  pos1:
+    x: 0
+    y: 0
+    z: 0
+  pos2:
+    x: 0
+    y: 0
+    z: 0
+
+# Capture time in seconds
+capture-time: 60
+
+# Interval between KOTH events (in minutes)
+event-interval: 60
+
+# Announcement times before KOTH starts (in minutes)
+announcements:
+  - 45
+  - 30
+  - 20
+  - 10
+  - 5
+  - 1
+
+# Reward configuration
+reward:
+  command: "give %player% diamond 5"
+  enabled: true
+
+# Messages
+messages:
+  prefix: "&6[KOTH] &r"
+  koth-starting: "KOTH will start in %time%!"
+  koth-started: "KOTH has started! Fight for the hill!"
+  koth-ended: "KOTH has ended! Winner: %player%"
+  koth-no-winner: "KOTH has ended with no winner!"
+  player-capturing: "%player% is capturing the hill! (%progress%)"
+  player-left-area: "%player% left the KOTH area! Progress reset."
+  region-not-set: "KOTH region is not set! Use /koth setregion"
+  region-set: "KOTH region has been set successfully!"
+  reward-set: "KOTH reward has been set!"
+  config-reloaded: "KOTH configuration reloaded!"
+  koth-stopped: "KOTH has been stopped!"
+  no-active-koth: "There is no active KOTH event!"
+  status-active: "KOTH is active! Capturing player: %player% (%progress%)"
+  status-waiting: "Next KOTH will start in %time%"
+  status-not-scheduled: "KOTH is not scheduled. Use /koth start to begin."
