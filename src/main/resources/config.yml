@@ -32,22 +32,28 @@ reward:
   enabled: true
   item: {}
 
-# Messages
+# Boss bar settings
+boss-bar:
+  enabled: true
+  color: WHITE
+  style: SOLID
+
+# Messages (use & for color codes: &a=green, &c=red, &e=yellow, &6=gold, etc.)
 messages:
   prefix: "&6[KOTH] &r"
-  koth-starting: "KOTH will start in %time%!"
-  koth-started: "KOTH has started! Fight for the hill!"
-  koth-ended: "KOTH has ended! Winner: %player%"
-  koth-no-winner: "KOTH has ended with no winner!"
-  player-capturing: "%player% is capturing the hill! (%progress%)"
-  player-left-area: "%player% left the KOTH area! Progress reset."
-  region-not-set: "KOTH region is not set! Use /koth setpos1 and /koth setpos2"
-  region-set: "KOTH region has been set successfully!"
-  position-set: "&aPosition %pos% set at: %x%, %y%, %z%"
-  reward-set: "KOTH reward has been set!"
-  config-reloaded: "KOTH configuration reloaded!"
-  koth-stopped: "KOTH has been stopped!"
-  no-active-koth: "There is no active KOTH event!"
-  status-active: "KOTH is active! Capturing player: %player% (%progress%)"
-  status-waiting: "Next KOTH will start in %time%"
-  status-not-scheduled: "KOTH is not scheduled. Use /koth start to begin."
+  koth-starting: "&e⚔ KOTH will start in &b%time%&e! Prepare for battle!"
+  koth-started: "&a&l✦ KOTH has started! &r&eFight for the hill!"
+  koth-ended: "&6&l★ KOTH has ended! &r&aWinner: &b%player%"
+  koth-no-winner: "&7KOTH has ended with no winner!"
+  player-capturing: "&e%player% &7is capturing the hill! &e(%progress%)"
+  player-left-area: "&c%player% &7left the KOTH area! &cProgress reset."
+  region-not-set: "&cKOTH region is not set! Use &e/koth setpos1 &cand &e/koth setpos2"
+  region-set: "&aKOTH region has been set successfully!"
+  position-set: "&aPosition %pos% set at: &e%x%, %y%, %z%"
+  reward-set: "&aKOTH reward has been set to the item in your hand!"
+  config-reloaded: "&aKOTH configuration reloaded!"
+  koth-stopped: "&cKOTH has been stopped!"
+  no-active-koth: "&cThere is no active KOTH event!"
+  status-active: "&eKOTH is active! &7Capturing player: &b%player% &7(&e%progress%&7)"
+  status-waiting: "&7Next KOTH will start in &e%time%"
+  status-not-scheduled: "&7KOTH is not scheduled. Use &e/koth start &7to begin."

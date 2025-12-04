@@ -16,10 +16,36 @@ public class BossBarManager {
     }
 
     public void createBossBar(String title) {
+        // Check if boss bar is enabled in config
+        if (!plugin.getConfig().getBoolean("boss-bar.enabled", true)) {
+            return;
+        }
+        
         if (bossBar != null) {
             bossBar.removeAll();
         }
-        bossBar = Bukkit.createBossBar(title, BarColor.WHITE, BarStyle.SOLID);
+        
+        // Get boss bar settings from config
+        String colorStr = plugin.getConfig().getString("boss-bar.color", "WHITE");
+        String styleStr = plugin.getConfig().getString("boss-bar.style", "SOLID");
+        
+        BarColor color;
+        try {
+            color = BarColor.valueOf(colorStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            color = BarColor.WHITE;
+            plugin.getLogger().warning("Invalid boss bar color in config: " + colorStr + ", using WHITE");
+        }
+        
+        BarStyle style;
+        try {
+            style = BarStyle.valueOf(styleStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            style = BarStyle.SOLID;
+            plugin.getLogger().warning("Invalid boss bar style in config: " + styleStr + ", using SOLID");
+        }
+        
+        bossBar = Bukkit.createBossBar(title, color, style);
         
         // Add all online players to the boss bar
         for (Player player : Bukkit.getOnlinePlayers()) {
