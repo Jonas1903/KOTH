@@ -207,6 +207,25 @@ public class KOTHManager {
         return nextKothTime;
     }
 
+    public void resetPlayerProgress(UUID playerId) {
+        if (playerTimeInZone.containsKey(playerId)) {
+            Player player = Bukkit.getPlayer(playerId);
+            if (player != null) {
+                Bukkit.broadcastMessage(plugin.getConfigManager().colorize(
+                    plugin.getConfigManager().getConfig().getString("messages.prefix", "&6[KOTH] &r") +
+                    "§c" + player.getName() + " was knocked out! Progress reset."
+                ));
+            }
+            playerTimeInZone.remove(playerId);
+            
+            // If this was the capturing player, reset capture state
+            if (playerId.equals(capturingPlayer)) {
+                capturingPlayer = null;
+                captureProgress = 0;
+            }
+        }
+    }
+
     public void shutdown() {
         if (captureTask != null) {
             captureTask.cancel();

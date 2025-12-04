@@ -27,10 +27,10 @@ announcements:
   - 5
   - 1
 
-# Reward configuration
+# Reward configuration (item will be serialized here when set via /koth setreward)
 reward:
-  command: "give %player% diamond 5"
   enabled: true
+  item: {}
 
 # Messages
 messages:

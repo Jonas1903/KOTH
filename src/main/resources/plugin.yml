@@ -8,7 +8,7 @@ description: King of the Hill plugin for Paper 1.21.8
 commands:
   koth:
     description: Main KOTH command
-    usage: /koth <start|stop|setregion|setreward|reload|status>
+    usage: /koth <start|stop|setpos1|setpos2|setreward|reload|status|help>
     permission: koth.admin
     permission-message: You do not have permission to use this command.
 
