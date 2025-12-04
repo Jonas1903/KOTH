@@ -21,7 +21,7 @@ public class RewardManager {
 
         ItemStack reward = getRewardItem();
         if (reward != null && !reward.getType().isAir()) {
-            // Try to add item to inventory
+            // Clone the reward to prevent any modifications to the original config ItemStack
             Map<Integer, ItemStack> leftover = player.getInventory().addItem(reward.clone());
             
             // If inventory was full, drop items at player's location
