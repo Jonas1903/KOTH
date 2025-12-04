@@ -13,7 +13,8 @@ import java.util.UUID;
 public class RegionManager {
     private final KOTH plugin;
     private KOTHRegion region;
-    private final Map<UUID, Location> selections = new HashMap<>();
+    private final Map<UUID, Location> pos1Selections = new HashMap<>();
+    private final Map<UUID, Location> pos2Selections = new HashMap<>();
 
     public RegionManager(KOTH plugin) {
         this.plugin = plugin;
@@ -40,17 +41,26 @@ public class RegionManager {
 
     public void setPosition(Player player, int posNumber) {
         Location loc = player.getLocation();
-        selections.put(player.getUniqueId(), loc);
+        if (posNumber == 1) {
+            pos1Selections.put(player.getUniqueId(), loc);
+        } else if (posNumber == 2) {
+            pos2Selections.put(player.getUniqueId(), loc);
+        }
         player.sendMessage(plugin.getConfigManager().colorize("§aPosition " + posNumber + " set at: " + 
             loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ()));
     }
 
     public void createRegion(Player player) {
-        Location pos1 = selections.get(player.getUniqueId());
-        Location pos2 = player.getLocation();
+        Location pos1 = pos1Selections.get(player.getUniqueId());
+        Location pos2 = pos2Selections.get(player.getUniqueId());
         
         if (pos1 == null) {
-            player.sendMessage(plugin.getConfigManager().colorize("§cPlease set position 1 first!"));
+            player.sendMessage(plugin.getConfigManager().colorize("§cPlease set position 1 first using /koth setregion pos1"));
+            return;
+        }
+        
+        if (pos2 == null) {
+            player.sendMessage(plugin.getConfigManager().colorize("§cPlease set position 2 first using /koth setregion pos2"));
             return;
         }
         
@@ -61,7 +71,8 @@ public class RegionManager {
         
         region = new KOTHRegion(pos1, pos2);
         saveRegion();
-        selections.remove(player.getUniqueId());
+        pos1Selections.remove(player.getUniqueId());
+        pos2Selections.remove(player.getUniqueId());
         player.sendMessage(plugin.getConfigManager().getMessage("region-set"));
     }
 

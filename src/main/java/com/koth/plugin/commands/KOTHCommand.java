@@ -38,7 +38,7 @@ public class KOTHCommand implements CommandExecutor, TabCompleter {
                 handleStop(sender);
                 break;
             case "setregion":
-                handleSetRegion(sender);
+                handleSetRegion(sender, args);
                 break;
             case "setreward":
                 handleSetReward(sender, args);
@@ -83,14 +83,28 @@ public class KOTHCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(plugin.getConfigManager().getMessage("koth-stopped"));
     }
 
-    private void handleSetRegion(CommandSender sender) {
+    private void handleSetRegion(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(plugin.getConfigManager().colorize("§cThis command can only be used by players!"));
             return;
         }
 
         Player player = (Player) sender;
-        plugin.getRegionManager().createRegion(player);
+        
+        if (args.length < 2) {
+            sender.sendMessage(plugin.getConfigManager().colorize("§cUsage: /koth setregion <pos1|pos2>"));
+            return;
+        }
+        
+        String position = args[1].toLowerCase();
+        if (position.equals("pos1") || position.equals("1")) {
+            plugin.getRegionManager().setPosition(player, 1);
+        } else if (position.equals("pos2") || position.equals("2")) {
+            plugin.getRegionManager().setPosition(player, 2);
+            plugin.getRegionManager().createRegion(player);
+        } else {
+            sender.sendMessage(plugin.getConfigManager().colorize("§cUsage: /koth setregion <pos1|pos2>"));
+        }
     }
 
     private void handleSetReward(CommandSender sender, String[] args) {
@@ -150,7 +164,8 @@ public class KOTHCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(plugin.getConfigManager().colorize("§6=== KOTH Commands ==="));
         sender.sendMessage(plugin.getConfigManager().colorize("§e/koth start §7- Start a KOTH event"));
         sender.sendMessage(plugin.getConfigManager().colorize("§e/koth stop §7- Stop current KOTH event"));
-        sender.sendMessage(plugin.getConfigManager().colorize("§e/koth setregion §7- Set KOTH region (stand at pos1, run command at pos2)"));
+        sender.sendMessage(plugin.getConfigManager().colorize("§e/koth setregion pos1 §7- Set first corner of KOTH region"));
+        sender.sendMessage(plugin.getConfigManager().colorize("§e/koth setregion pos2 §7- Set second corner of KOTH region"));
         sender.sendMessage(plugin.getConfigManager().colorize("§e/koth setreward <reward> §7- Set reward command"));
         sender.sendMessage(plugin.getConfigManager().colorize("§e/koth reload §7- Reload configuration"));
         sender.sendMessage(plugin.getConfigManager().colorize("§e/koth status §7- Show KOTH status"));
@@ -163,6 +178,15 @@ public class KOTHCommand implements CommandExecutor, TabCompleter {
             List<String> result = new ArrayList<>();
             for (String completion : completions) {
                 if (completion.toLowerCase().startsWith(args[0].toLowerCase())) {
+                    result.add(completion);
+                }
+            }
+            return result;
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("setregion")) {
+            List<String> completions = Arrays.asList("pos1", "pos2");
+            List<String> result = new ArrayList<>();
+            for (String completion : completions) {
+                if (completion.toLowerCase().startsWith(args[1].toLowerCase())) {
                     result.add(completion);
                 }
             }

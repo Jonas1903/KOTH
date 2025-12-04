@@ -34,8 +34,8 @@ All commands require OP permission (`koth.admin`).
 
 - `/koth start` - Manually start a KOTH event
 - `/koth stop` - Stop the current KOTH event
-- `/koth setregion` - Set the KOTH region
-  - Stand at position 1, then move to position 2 and run the command
+- `/koth setregion pos1` - Set the first corner of the KOTH region
+- `/koth setregion pos2` - Set the second corner of the KOTH region
 - `/koth setreward <command>` - Set the reward command (use `%player%` for player name)
 - `/koth reload` - Reload the configuration
 - `/koth status` - Show current KOTH status
@@ -113,9 +113,10 @@ KOTH/
 
 1. Set up the KOTH region:
    ```
-   /koth setregion
+   /koth setregion pos1
+   (move to opposite corner)
+   /koth setregion pos2
    ```
-   (Stand at one corner, move to opposite corner, run command)
 
 2. Set a reward:
    ```
