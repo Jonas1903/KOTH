@@ -46,8 +46,20 @@ public class RegionManager {
         } else if (posNumber == 2) {
             pos2Selections.put(player.getUniqueId(), loc);
         }
-        player.sendMessage(plugin.getConfigManager().colorize("§aPosition " + posNumber + " set at: " + 
-            loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ()));
+        
+        // Use config message if available, otherwise use default
+        String message = plugin.getConfigManager().getConfig().getString("messages.position-set");
+        if (message == null) {
+            message = "&aPosition %pos% set at: %x%, %y%, %z%";
+        }
+        message = plugin.getConfigManager().colorize(
+            plugin.getConfigManager().getConfig().getString("messages.prefix", "&6[KOTH] &r") + message
+                .replace("%pos%", String.valueOf(posNumber))
+                .replace("%x%", String.valueOf(loc.getBlockX()))
+                .replace("%y%", String.valueOf(loc.getBlockY()))
+                .replace("%z%", String.valueOf(loc.getBlockZ()))
+        );
+        player.sendMessage(message);
     }
 
     public void createRegion(Player player) {

@@ -43,6 +43,7 @@ messages:
   player-left-area: "%player% left the KOTH area! Progress reset."
   region-not-set: "KOTH region is not set! Use /koth setregion"
   region-set: "KOTH region has been set successfully!"
+  position-set: "&aPosition %pos% set at: %x%, %y%, %z%"
   reward-set: "KOTH reward has been set!"
   config-reloaded: "KOTH configuration reloaded!"
   koth-stopped: "KOTH has been stopped!"

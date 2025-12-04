@@ -112,12 +112,9 @@ public class KOTHManager {
         playerTimeInZone.entrySet().removeIf(entry -> {
             Player player = Bukkit.getPlayer(entry.getKey());
             if (player == null || !plugin.getRegionManager().isInRegion(player.getLocation())) {
-                if (entry.getKey().equals(capturingPlayer)) {
-                    Player p = Bukkit.getPlayer(entry.getKey());
-                    if (p != null) {
-                        Bukkit.broadcastMessage(plugin.getConfigManager().getMessage("player-left-area")
-                            .replace("%player%", p.getName()));
-                    }
+                if (entry.getKey().equals(capturingPlayer) && player != null) {
+                    Bukkit.broadcastMessage(plugin.getConfigManager().getMessage("player-left-area")
+                        .replace("%player%", player.getName()));
                 }
                 return true;
             }
