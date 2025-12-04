@@ -1,0 +1,18 @@
+name: KOTH
+version: '${project.version}'
+main: com.koth.plugin.KOTH
+api-version: '1.21'
+author: Jonas1903
+description: King of the Hill plugin for Paper 1.21.8
+
+commands:
+  koth:
+    description: Main KOTH command
+    usage: /koth <start|stop|setregion|setreward|reload|status>
+    permission: koth.admin
+    permission-message: You do not have permission to use this command.
+
+permissions:
+  koth.admin:
+    description: Allows access to all KOTH commands
+    default: op
