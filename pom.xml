@@ -62,6 +62,8 @@
     </repositories>
 
     <dependencies>
+        <!-- Spigot API 1.21 is compatible with Paper 1.21.x including 1.21.8 -->
+        <!-- Using Spigot API as Paper API extends it -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>

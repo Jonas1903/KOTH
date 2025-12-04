@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,17 +110,20 @@ public class KOTHManager {
         }
 
         // Reset times for players not in zone
-        playerTimeInZone.entrySet().removeIf(entry -> {
+        List<UUID> toRemove = new ArrayList<>();
+        for (Map.Entry<UUID, Long> entry : playerTimeInZone.entrySet()) {
             Player player = Bukkit.getPlayer(entry.getKey());
             if (player == null || !plugin.getRegionManager().isInRegion(player.getLocation())) {
                 if (entry.getKey().equals(capturingPlayer) && player != null) {
                     Bukkit.broadcastMessage(plugin.getConfigManager().getMessage("player-left-area")
                         .replace("%player%", player.getName()));
                 }
-                return true;
+                toRemove.add(entry.getKey());
             }
-            return false;
-        });
+        }
+        for (UUID uuid : toRemove) {
+            playerTimeInZone.remove(uuid);
+        }
 
         capturingPlayer = newCapturing;
 
