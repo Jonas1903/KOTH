@@ -75,11 +75,31 @@ reward:
 
 ## Building from Source
 
+### Using Maven (Command Line)
+
 ```bash
 mvn clean package
 ```
 
-The compiled JAR will be in the `target` directory.
+The compiled JAR will be in the `target` directory as `KOTH-1.0.0.jar`.
+
+### Using IntelliJ IDEA
+
+1. Open IntelliJ IDEA
+2. Click **File** → **Open** and select the project directory
+3. Wait for IntelliJ to import the Maven project and download dependencies
+4. To build:
+   - Click **View** → **Tool Windows** → **Maven**
+   - In the Maven panel, expand **KOTH** → **Lifecycle**
+   - Double-click **package** to build the JAR
+5. The compiled JAR will be in the `target` directory
+
+#### Running/Debugging in IntelliJ
+
+While you cannot run a Bukkit/Paper plugin directly in IntelliJ without a server, you can:
+1. Set up a local Paper 1.21.8 test server
+2. Configure IntelliJ to copy the JAR to the server's plugins folder after build
+3. Use remote debugging to debug the plugin on a running server
 
 ## Project Structure
 
